@@ -22,6 +22,7 @@ if (dataJson) {
 
         // Create a heading for the question number
         const questionNumber = document.createElement('h4');
+        questionNumber.style.marginBottom = '0px'
         questionNumber.textContent = 'Question ' + (i + 1) + ':';
 
         // Create the question paragraph element
@@ -30,9 +31,12 @@ if (dataJson) {
         questionParagraph.id = 'question' + (i + 1);
 
         // Create a span for the question text and add padding
-        const questionText = document.createElement('span');
+        const questionText = document.createElement('p');
         questionText.textContent = decodedQuestion;
-        questionText.style.paddingBottom = '20px'; // Adjust padding as needed
+        questionText.style.marginLeft = '10px'; 
+        questionText.style.marginBottom = '5px';
+        questionText.style.marginTop = '2px';
+
 
         // Append the question text to the question paragraph
         questionParagraph.appendChild(questionText);
@@ -50,7 +54,7 @@ if (dataJson) {
             // Create a label and checkbox for each answer
             const label = document.createElement('label');
             const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox'; // Set input type to checkbox
+            checkbox.type = 'radio'; // Set input type to checkbox
             checkbox.name = 'question' + (i + 1); // Name attribute for grouping
             checkbox.value = decodedAnswer; // Set value to the answer
 
@@ -66,6 +70,24 @@ if (dataJson) {
         questionDiv.appendChild(questionNumber);
         questionDiv.appendChild(questionParagraph);
     }
+    // Create a container for the button
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.display = 'flex'; // Enable Flexbox
+    buttonContainer.style.justifyContent = 'center'; // Center horizontally
+    buttonContainer.style.marginTop = '20px'; // Add top margin
+
+    // Create the submit button
+    const questionBtn = document.createElement('button');
+    questionBtn.textContent = 'Submit';
+    questionBtn.onclick = () => {
+        submitAnswers();
+    };
+
+    // Append the button to the button container
+    buttonContainer.appendChild(questionBtn);
+
+    // Append the button container to the questionDiv or your desired parent element
+    questionDiv.appendChild(buttonContainer);
 } else {
     questionDiv.textContent = "No questions available."; // Fallback message
 }
@@ -78,3 +100,84 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+submitAnswers = () => {
+    const selectedAnswers = [];
+    const totalQuestions = dataJson.length; 
+    let questionAnswers = [];
+    let score = 0;
+
+    // Iterate through each question to check selected answers
+    for (let i = 0; i < totalQuestions; i++) {
+        let color = 'red';
+        const radioButtons = document.getElementsByName('question' + (i + 1));
+        let userAnswer = null; // Default to null if no answer selected
+
+        // Find the selected radio button
+        for (const radioButton of radioButtons) {
+            if (radioButton.checked) { 
+                userAnswer = radioButton.value; 
+                selectedAnswers.push({
+                    question: 'Question ' + (i + 1), 
+                    answer: userAnswer 
+                });
+
+                // Compare with the correct answer
+                const correctAnswer = decodeHtmlEntities(dataJson[i].correct_answer);
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    color = 'green';
+                }
+
+                break; // Exit the loop once an answer is found
+            }
+        }
+
+        // If no radio button was selected, add a placeholder for unanswered question
+        if (userAnswer === null) {
+            selectedAnswers.push({
+                question: 'Question ' + (i + 1),
+                answer: 'No answer selected'
+            });
+        }
+
+        // Create resultDiv to show the result for each question
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'questionCard';
+
+        // Display the question
+        const questionText = document.createElement('h4');
+        questionText.textContent = 'Question ' + (i + 1) + ': ' + decodeHtmlEntities(dataJson[i].question);
+        resultDiv.appendChild(questionText);
+
+        // Show the user's selected answer or 'No answer selected'
+        const userAnswerText = document.createElement('p');
+        userAnswerText.textContent = `Your Answer: ${selectedAnswers[i].answer}`;
+        userAnswerText.style.color = color;
+        resultDiv.appendChild(userAnswerText);
+
+        // Show the correct answer
+        const correctAnswerText = document.createElement('p');
+        correctAnswerText.textContent = `Correct Answer: ${decodeHtmlEntities(dataJson[i].correct_answer)}`;
+        resultDiv.appendChild(correctAnswerText);
+
+        questionAnswers.push(resultDiv);
+    }
+
+    // Clear the questionDiv and display results
+    questionDiv.innerHTML = '';
+
+    // Show each question with correct answer and user's answer
+    for (let div of questionAnswers) {
+        questionDiv.appendChild(div);
+    }
+
+    // Display the final score
+    const scoreText = document.createElement('h3');
+    scoreText.textContent = `Your Score: ${score}/${totalQuestions}`;
+    questionDiv.appendChild(scoreText);
+
+    // Scroll to the top of the questionDiv
+    questionDiv.scrollTo(0, 0);
+};
+
