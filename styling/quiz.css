@@ -1,0 +1,43 @@
+body{
+    height:100vh;
+    margin: 0;
+}
+
+#quizDescription{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: black;
+    height: 30vh;
+}
+
+#quizConfirmation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30vw;
+}
+
+#quizType{
+    padding: 10px;
+    width: 20vw;
+    margin-bottom: 2vh;
+    background-color: aliceblue;
+}
+
+#quizSelectBtn {
+    padding: 10px;
+    width: 10vw;
+    background-color: aliceblue;
+}
+
+#quizInfo {
+    display: flex;
+    width: 50vw;
+    flex-direction: column;
+}
+
+#Info{
+    color: aliceblue;
+}

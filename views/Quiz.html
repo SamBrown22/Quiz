@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel='stylesheet' href="../styling/quiz.css">
+    </head>
+
+    <body>
+        <div id="quizDescription">
+            <div id="quizConfirmation">
+                <select id="quizType">
+                    <option value='programming' selected>Programming</option>
+                    <option value='generalKnowledge'>General Knowledge</option>
+                </select>
+
+                <button id="quizSelectBtn" onclick="getQuestions()">Submit</button>
+            </div>
+
+            <div id="quizInfo">
+                <h2 id="Info">About the Quiz</h2>
+                <p style="color: aliceblue;"> Checklist</p>
+            </div>
+        </div>
+
+        <script src= '../scripts/quiz.js'></script> <!-- Script for handling fetching and selection of quizzes-->
+    </body>
+
+        
+</html>
