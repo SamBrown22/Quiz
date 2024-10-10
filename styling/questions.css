@@ -8,6 +8,9 @@ body {
 }
 
 #questionDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 80vh;
     width: 80vw;
     background-color: aliceblue;
@@ -22,6 +25,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    min-width: 90%;
     min-height: 60vh;
     padding: 20px;
     border: 1px solid #ccc;
@@ -78,13 +82,28 @@ button:hover {
 /* Submit button */
 button[type="submit"] {
     background-color: #28a745;
+    max-width: 150px;
 }
 
 button[type="submit"]:hover {
     background-color: #218838;
 }
 
-/* Style for question content */
-.questionContent {
-    margin-bottom: 15px; /* Space below question content */
+.answerCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    min-width: 90%;
+    min-height: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    background-color: #ccc;
+    border-radius: 15px;
 }
+
+.answerCard p {
+    margin: 2px;
+}
+

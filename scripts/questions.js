@@ -158,7 +158,7 @@ const submitAnswers = () => {
         }
 
         const resultDiv = document.createElement('div');
-        resultDiv.className = 'questionCard';
+        resultDiv.className = 'answerCard';
         const questionText = document.createElement('h4');
         questionText.textContent = 'Question ' + (i + 1) + ': ' + decodeHtmlEntities(dataJson[i].question);
         resultDiv.appendChild(questionText);
