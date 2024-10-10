@@ -124,23 +124,27 @@ function navigateQuestion(step) {
 
 // Submit answers and display results
 const submitAnswers = () => {
-    const selectedAnswers = [];
+    const selectedAnswers = []; // Users selected answers array
     const totalQuestions = dataJson.length;
-    let questionAnswers = [];
+    let questionAnswers = []; // Array Containing the divs for each question and corresponding answer
     let score = 0;
 
     for (let i = 0; i < totalQuestions; i++) {
-        let color = 'red';
-        const radioButtons = document.getElementsByName('question' + (i + 1));
+        let color = 'red'; // Assume incorrection
+        const radioButtons = document.getElementsByName('question' + (i + 1)); // Get radio buttons
         let userAnswer = null;
 
-        for (const radioButton of radioButtons) {
-            if (radioButton.checked) {
-                userAnswer = radioButton.value;
+        for (const radioButton of radioButtons) { // Loop through radio buttons
+            if (radioButton.checked) { // Check for selected
+                userAnswer = radioButton.value; // Get the value from the respected radio button
+
+                // Store selection in array
                 selectedAnswers.push({
                     question: 'Question ' + (i + 1),
                     answer: userAnswer,
                 });
+
+                // Check to see if the answer was correct
                 const correctAnswer = decodeHtmlEntities(dataJson[i].correct_answer);
                 if (userAnswer === correctAnswer) {
                     score++;
@@ -150,6 +154,7 @@ const submitAnswers = () => {
             }
         }
 
+        // If the Question was unanswered
         if (userAnswer === null) {
             selectedAnswers.push({
                 question: 'Question ' + (i + 1),
@@ -157,6 +162,7 @@ const submitAnswers = () => {
             });
         }
 
+        // Create the div element for the corresponding question and store in array
         const resultDiv = document.createElement('div');
         resultDiv.className = 'answerCard';
         const questionText = document.createElement('h4');
@@ -172,14 +178,19 @@ const submitAnswers = () => {
         questionAnswers.push(resultDiv);
     }
 
+    // Reset the Div Content to display answers
     questionDiv.innerHTML = '';
+
+    // Append the users score
+    const scoreText = document.createElement('h2');
+    scoreText.textContent = `You Scored: ${score}/${totalQuestions}`;
+    questionDiv.appendChild(scoreText);
+
+    // Fetch each div for each question and add to the element 
     for (let div of questionAnswers) {
         questionDiv.appendChild(div);
     }
 
-    const scoreText = document.createElement('h3');
-    scoreText.textContent = `Your Score: ${score}/${totalQuestions}`;
-    questionDiv.appendChild(scoreText);
-
+    // Move users screen to top
     questionDiv.scrollTo(0, 0);
 };
