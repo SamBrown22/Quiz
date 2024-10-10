@@ -20,16 +20,24 @@ if (dataJson) {
         let result = dataJson[i];
         const decodedQuestion = decodeHtmlEntities(result.question);
 
-        // Create a question paragraph element
+        // Create a container for the whole question and navigation
         const questionParagraph = document.createElement('div');
         questionParagraph.className = 'questionCard';
         questionParagraph.id = 'question' + (i + 1);
-        questionParagraph.style.display = 'none'; // Initially hide all questions
+
+        // Create a div specifically for question content
+        const questionContentDiv = document.createElement('div');
+        questionContentDiv.className = 'questionContent';
+
+        // Create text for Question number
+        const questionNumber = document.createElement('h4');
+        questionNumber.textContent = 'Question ' + (i + 1) + ': ';
+        questionContentDiv.appendChild(questionNumber);
 
         // Create and append question elements
         const questionText = document.createElement('p');
         questionText.textContent = decodedQuestion;
-        questionParagraph.appendChild(questionText);
+        questionContentDiv.appendChild(questionText);
 
         // Create and append answers
         const answers = [result.correct_answer, ...result.incorrect_answers];
@@ -42,19 +50,40 @@ if (dataJson) {
             checkbox.value = decodeHtmlEntities(answer);
             label.appendChild(checkbox);
             label.appendChild(document.createTextNode(decodeHtmlEntities(answer)));
-            questionParagraph.appendChild(label);
+            questionContentDiv.appendChild(label);
         });
 
-        // Append the question paragraph to the questionDiv
+        // Append the question content div to the question paragraph
+        questionParagraph.appendChild(questionContentDiv);
+
+        // Create a separate div for navigation buttons
+        const navDiv = document.createElement('div');
+        navDiv.className = 'navDiv';
+
+        // Previous button
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Previous';
+        prevButton.onclick = () => navigateQuestion(-1);
+        if (i > 0) navDiv.appendChild(prevButton);
+
+        // Next button
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.style.marginLeft = 'auto';
+        nextButton.onclick = () => navigateQuestion(1);
+        if (i < dataJson.length - 1) navDiv.appendChild(nextButton);
+
+        // Append the navDiv to the question paragraph
+        questionParagraph.appendChild(navDiv);
+
+        // Append the question paragraph to the main container
         questionDiv.appendChild(questionParagraph);
     }
-
-    // Create a container for navigation buttons
-    addNavigationButtons();
 
     // Create and append the submit button
     const submitButton = document.createElement('button');
     submitButton.textContent = 'Submit';
+    submitButton.type = 'submit'; // Added type for CSS targeting
     submitButton.onclick = () => {
         submitAnswers();
     };
@@ -81,7 +110,7 @@ function showQuestion(index) {
     for (let i = 0; i < questions.length; i++) {
         questions[i].style.display = 'none';
     }
-    questions[index].style.display = 'block';
+    questions[index].style.display = 'flex';
 }
 
 // Function to handle Next/Previous navigation
@@ -93,34 +122,8 @@ function navigateQuestion(step) {
     showQuestion(currentQuestionIndex);
 }
 
-// Add navigation buttons for each question
-function addNavigationButtons() {
-    const totalQuestions = dataJson.length;
-    for (let i = 0; i < totalQuestions; i++) {
-        const questionCard = document.getElementById('question' + (i + 1));
-        const navDiv = document.createElement('div');
-        navDiv.style.display = 'flex';
-        navDiv.style.justifyContent = 'space-between';
-        navDiv.style.marginTop = '10px';
-
-        // Previous button
-        const prevButton = document.createElement('button');
-        prevButton.textContent = 'Previous';
-        prevButton.onclick = () => navigateQuestion(-1);
-        if (i > 0) navDiv.appendChild(prevButton);
-
-        // Next button
-        const nextButton = document.createElement('button');
-        nextButton.textContent = 'Next';
-        nextButton.onclick = () => navigateQuestion(1);
-        if (i < totalQuestions - 1) navDiv.appendChild(nextButton);
-
-        questionCard.appendChild(navDiv);
-    }
-}
-
 // Submit answers and display results
-submitAnswers = () => {
+const submitAnswers = () => {
     const selectedAnswers = [];
     const totalQuestions = dataJson.length;
     let questionAnswers = [];

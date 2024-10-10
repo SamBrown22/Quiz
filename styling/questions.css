@@ -16,13 +16,18 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
 }
 
-/* Style for the question card */
+/* Question card styling */
 .questionCard {
-    height: auto; /* Allow the height to be dynamic */
-    padding: 1vh; /* Adjust padding */
-    margin-bottom: 10px; /* Space between question cards */
-    background-color: #ccc8c8;
-    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    min-height: 60vh;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    background-color: #ccc;
+    border-radius: 15px;
 }
 
 /* Style for the checkbox input */
@@ -45,5 +50,41 @@ body {
 /* Change background color on hover */
 .questionCard label:hover {
     background-color: rgba(29, 25, 32, 0.3); /* Light blue on hover */
-    
+}
+
+/* Navigation div (button container) */
+.navDiv {
+    display: flex;
+    justify-content: space-between;
+    bottom: 20px;
+    width: 100%;
+    margin-top: 20px; /* Add space above navigation buttons */
+}
+
+/* Previous and next button styling */
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Submit button */
+button[type="submit"] {
+    background-color: #28a745;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Style for question content */
+.questionContent {
+    margin-bottom: 15px; /* Space below question content */
 }
